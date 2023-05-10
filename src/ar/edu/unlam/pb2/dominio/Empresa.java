@@ -6,10 +6,12 @@ public class Empresa {
 
 	private String nombre;
 	private HashSet<Puerta> puertas;
+	private HashSet<Empleado> empleados;
 
 	public Empresa(String nombre) {
 		this.nombre = nombre;
 		this.puertas = new HashSet<Puerta>();
+		this.empleados = new HashSet<Empleado>();
 	}
 
 	public String getNombre() {
@@ -31,5 +33,20 @@ public class Empresa {
 	public void setPuertas(HashSet<Puerta> puertas) {
 		this.puertas = puertas;
 	}
+
+	public void agregarEmpleado(Empleado empleado) {
+		this.empleados.add(empleado);
+		
+	}
+
+	public HashSet<Empleado> getEmpleados() {
+		return empleados;
+	}
+
+	public void setEmpleados(HashSet<Empleado> empleados) {
+		this.empleados = empleados;
+	}
+	
+	
 
 }
