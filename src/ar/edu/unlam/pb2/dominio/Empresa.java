@@ -37,9 +37,24 @@ public class Empresa {
 	}
 
 	public void agregarEmpleado(Empleado empleado) {
-		this.empleados.add(empleado);
 		
+		if(this.empleados.isEmpty() && this.credenciales.isEmpty()) {
+			this.empleados.add(empleado);
+			this.agregarCredencial(empleado.getCredencial());
+			
+		}else {
+			for (Credencial credencialObtenida : credenciales) {
+				if(!credencialObtenida.getId().equals(empleado.getCredencial().getId())) {
+					this.empleados.add(empleado);
+					this.agregarCredencial(empleado.getCredencial());
+		}
+			}
+			
+		}
+		
+	
 	}
+		
 
 	public HashSet<Empleado> getEmpleados() {
 		return empleados;

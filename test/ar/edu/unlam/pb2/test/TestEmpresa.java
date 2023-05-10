@@ -52,10 +52,10 @@ public class TestEmpresa {
 		String apellido = "Quito";
 		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
 		Integer idCredencial = 1;
-		Credencial credencial = new Credencial(idCredencial);
 		String obraSocial = "OSDE";
 
 		Empresa empresa = new Empresa(nombre);
+		Credencial credencial = new Credencial(idCredencial);
 		Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial, obraSocial);
 		empresa.agregarEmpleado(efectivo);
 		int CANTIDAD_ESPERADA = 1;
@@ -64,7 +64,7 @@ public class TestEmpresa {
 	}
 	
 	@Test
-	public void queNoSePuedanAgregarDosEmpleadosConElMismoLegajoAUnaEmpresa() {
+	public void queNoSePuedanAgregarDosEmpleadosConElMismoLegajoYCredencialAUnaEmpresa() {
 		String nombre = "Queremos Aprobar";
 		Integer legajo = 123;
 		String nombreEmpleado = "Esteban";
@@ -73,17 +73,44 @@ public class TestEmpresa {
 		String apellido2 = "Gonzales";
 		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
 		Integer idCredencial = 1;
-		Credencial credencial = new Credencial(idCredencial);
 		String obraSocial = "OSDE";
 		int CANTIDAD_ESPERADA = 1;
 
 		Empresa empresa = new Empresa(nombre);
+		Credencial credencial = new Credencial(idCredencial);
 		Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial, obraSocial);
 		Empleado efectivo2 = new Efectivo(legajo, nombreEmpleado2, apellido2, fechaIngreso, credencial, obraSocial);
 		empresa.agregarEmpleado(efectivo);
 		empresa.agregarEmpleado(efectivo2);
 		
 		assertEquals(CANTIDAD_ESPERADA,empresa.getEmpleados().size());
+	}
+	
+	@Test
+	public void queNoSePuedaAgregarUnEmpleadoConUnaCredencialAnteriorMenteRegistrada() {
+		String nombre = "Queremos Aprobar";
+		Integer legajo = 123;
+		String nombreEmpleado = "Esteban";
+		String nombreEmpleado2 = "Gonzalo";
+		String apellido = "Quito";
+		String apellido2 = "Gonzales";
+		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+		Integer idCredencial = 1;
+		String obraSocial = "OSDE";
+		int CANTIDAD_EMPLEADOS_ESPERADOS = 0;
+		int CANTIDAD_CREDENCIALES_ESPERADAS = 1;
+
+		Empresa empresa = new Empresa(nombre);
+		Credencial credencial = new Credencial(idCredencial);
+		Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial, obraSocial);
+		empresa.agregarCredencial(credencial);
+		empresa.agregarEmpleado(efectivo);
+
+		
+		assertEquals(CANTIDAD_EMPLEADOS_ESPERADOS,empresa.getEmpleados().size());
+		assertEquals(CANTIDAD_CREDENCIALES_ESPERADAS,empresa.getCredenciales().size());
+		
+		
 	}
 	
 	@Test
