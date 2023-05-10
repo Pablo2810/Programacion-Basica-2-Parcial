@@ -7,11 +7,13 @@ public class Empresa {
 	private String nombre;
 	private HashSet<Puerta> puertas;
 	private HashSet<Empleado> empleados;
+	private HashSet<Credencial> credenciales;
 
 	public Empresa(String nombre) {
 		this.nombre = nombre;
 		this.puertas = new HashSet<Puerta>();
 		this.empleados = new HashSet<Empleado>();
+		this.credenciales = new HashSet<Credencial>();
 	}
 
 	public String getNombre() {
@@ -45,6 +47,18 @@ public class Empresa {
 
 	public void setEmpleados(HashSet<Empleado> empleados) {
 		this.empleados = empleados;
+	}
+	
+	public HashSet<Credencial> getCredenciales() {
+		return credenciales;
+	}
+
+	public void setCredenciales(HashSet<Credencial> credenciales) {
+		this.credenciales = credenciales;
+	}
+
+	public void agregarCredencial(Credencial credencial) {
+		this.credenciales.add(credencial);
 	}
 	
 	

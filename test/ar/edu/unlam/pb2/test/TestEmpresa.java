@@ -86,4 +86,34 @@ public class TestEmpresa {
 		assertEquals(CANTIDAD_ESPERADA,empresa.getEmpleados().size());
 	}
 	
+	@Test
+	public void queSePuedaAgregarUnaCredencialAUnaEmpresa() {
+		Empresa empresa = new Empresa("Queremos aprobar");
+		Credencial credencial = new Credencial(1);
+		
+		empresa.agregarCredencial(credencial);
+		
+		Integer valEsp = 1;
+		Integer valObt = empresa.getCredenciales().size();
+		
+		assertEquals(valEsp, valObt);
+	}
+	
+	
+	@Test
+	public void queNoSePuedaAgregarUnaCredencialConMismoID() {
+		Empresa empresa = new Empresa("Queremos aprobar");
+		Credencial credencial1 = new Credencial(1);
+		Credencial credencial2 = new Credencial(2);
+		Credencial credencial3 = new Credencial(1);
+		
+		empresa.agregarCredencial(credencial1);
+		empresa.agregarCredencial(credencial2);
+		empresa.agregarCredencial(credencial3);
+		
+		Integer valEsp = 2;
+		Integer valObt = empresa.getCredenciales().size();
+		
+		assertEquals(valEsp, valObt);
+	}
 }
