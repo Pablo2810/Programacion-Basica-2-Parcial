@@ -5,6 +5,7 @@ import java.util.Objects;
 public class Credencial {
 	
 	private Integer id;
+	private Estado estado;
 	
 	public Credencial(Integer id) {
 		this.id = id;
@@ -16,6 +17,14 @@ public class Credencial {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 
 	@Override

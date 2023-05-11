@@ -5,11 +5,17 @@ import java.time.LocalDate;
 public class Contratado extends Empleado {
 	private Contrato contrato;
 
-	public Contratado(Integer legajo, String nombre, String apellido, LocalDate fechaIngreso, Credencial credencial,
-			LocalDate FechaCaducidad) {
+	public Contratado(Integer legajo, String nombre, String apellido, LocalDate fechaIngreso, Credencial credencial, LocalDate FechaCaducidad) {
 		super(legajo, nombre, apellido, fechaIngreso, credencial);
 		this.contrato = new Contrato(FechaCaducidad);
 	}
+	
+	public Contratado(Integer legajo, String nombre, String apellido, LocalDate fechaIngreso, LocalDate FechaCaducidad) {
+		super(legajo, nombre, apellido, fechaIngreso);
+		
+		this.contrato = new Contrato(FechaCaducidad);
+	}
+	
 
 	public Contrato getContrato() {
 		return contrato;

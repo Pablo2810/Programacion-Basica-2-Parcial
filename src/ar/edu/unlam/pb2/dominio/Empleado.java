@@ -18,6 +18,13 @@ public abstract class Empleado {
 		this.fechaIngreso = fechaIngreso;
 		this.credencial = credencial;
 	}
+	
+	public Empleado(Integer legajo, String nombre, String apellido, LocalDate fechaIngreso) {
+		this.legajo = legajo;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.fechaIngreso = fechaIngreso;
+	}
 
 	public Integer getLegajo() {
 		return legajo;

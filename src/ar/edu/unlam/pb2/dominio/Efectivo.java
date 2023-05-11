@@ -12,6 +12,21 @@ public class Efectivo extends Empleado {
 		this.obraSocial = obraSocial;
 		
 	}
+
+	public Efectivo(Integer legajo, String nombre, String apellido, LocalDate fechaIngreso, String obraSocial) {
+		super(legajo, nombre, apellido, fechaIngreso);
+		
+		this.obraSocial = obraSocial;
+	}
+
+	public String getObraSocial() {
+		return obraSocial;
+	}
+
+	public void setObraSocial(String obraSocial) {
+		this.obraSocial = obraSocial;
+	}
+	
 	
 
 }

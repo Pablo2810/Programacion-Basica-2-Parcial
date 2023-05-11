@@ -40,13 +40,15 @@ public class Empresa {
 		
 		if(this.empleados.isEmpty() && this.credenciales.isEmpty()) {
 			this.empleados.add(empleado);
-			this.agregarCredencial(empleado.getCredencial());
+			if(empleado.getCredencial() != null) {
+			this.agregarCredencialActivada(empleado.getCredencial());
+			 }
 			
 		}else {
 			for (Credencial credencialObtenida : credenciales) {
 				if(!credencialObtenida.getId().equals(empleado.getCredencial().getId())) {
 					this.empleados.add(empleado);
-					this.agregarCredencial(empleado.getCredencial());
+					this.agregarCredencialActivada(empleado.getCredencial());
 		}
 			}
 			
@@ -55,6 +57,12 @@ public class Empresa {
 	
 	}
 		
+
+	private void agregarCredencialActivada(Credencial credencial) {
+		credencial.setEstado(Estado.ACTIVADA);
+		this.credenciales.add(credencial);
+		
+	}
 
 	public HashSet<Empleado> getEmpleados() {
 		return empleados;
@@ -73,9 +81,35 @@ public class Empresa {
 	}
 
 	public void agregarCredencial(Credencial credencial) {
+		credencial.setEstado(Estado.DESACTIVADA);
 		this.credenciales.add(credencial);
 	}
-	
+
+	public void asignarCredencialDesactivadaYActivarla(Empleado empleado) {
+		
+		for (Credencial credencial : credenciales) {
+			if(credencial.getEstado().equals(Estado.DESACTIVADA)) {
+				credencial.setEstado(Estado.ACTIVADA);
+				empleado.setCredencial(credencial);
+			}
+		}
+		
+	}
+
+	public void eliminarEmpleadoYDesactivarCredencial(Empleado empleado) {
+		
+		for (Empleado empleadoObtenido : empleados) {
+			if(empleadoObtenido.getLegajo().equals(empleado.getLegajo())) {
+				for (Credencial credencial : credenciales) {
+					if(credencial.getId().equals(empleado.getCredencial().getId())) {
+						credencial.setEstado(Estado.DESACTIVADA);
+						empleados.remove(empleado);
+					}
+				}
+			}
+		}
+		
+	}
 	
 
 }
