@@ -18,6 +18,10 @@ public class Efectivo extends Empleado {
 		
 		this.obraSocial = obraSocial;
 	}
+	
+	public void abrirPuerta(Empleado empleado, Puerta puerta) {
+		
+	}
 
 	public String getObraSocial() {
 		return obraSocial;

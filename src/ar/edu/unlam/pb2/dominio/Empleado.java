@@ -25,6 +25,8 @@ public abstract class Empleado {
 		this.apellido = apellido;
 		this.fechaIngreso = fechaIngreso;
 	}
+	
+	public abstract void abrirPuerta(Empleado empleado, Puerta puerta);
 
 	public Integer getLegajo() {
 		return legajo;
