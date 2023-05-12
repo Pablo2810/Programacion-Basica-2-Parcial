@@ -123,7 +123,6 @@ public class TestEmpresa {
 		empresa.agregarCredencial(credencial);
 		empresa.agregarEmpleado(efectivo);
 
-		
 		assertEquals(CANTIDAD_EMPLEADOS_ESPERADOS,empresa.getEmpleados().size());
 		assertEquals(CANTIDAD_CREDENCIALES_ESPERADAS,empresa.getCredenciales().size());
 		
@@ -219,4 +218,70 @@ public class TestEmpresa {
 		
 		assertEquals(valEsp, valObt);
 	}
+	
+	@Test
+	public void queSePuedaAgregarUnPermisoEnLaCredencial() {
+		Empresa empresa = new Empresa("Queremos aprobar");
+		Integer idCredencial = 1;
+		Credencial credencial = new Credencial(idCredencial);
+		Integer permiso = 1;
+		
+		empresa.agregarCredencial(credencial);
+		empresa.agregarPermisoACredencial(permiso,idCredencial);
+		
+		assertEquals(1,empresa.buscarCredencialPorId(idCredencial).getPermisos().size());
+	}
+	
+	@Test
+	public void queSePuedaRegistrarUnAccesoEnLaEmpresa() {
+		Empresa empresa = new Empresa("Queremos aprobar");
+		
+		Integer idCredencial = 1;
+		Credencial credencial = new Credencial(idCredencial);
+		
+		Integer legajo = 123;
+		String nombreEmpleado = "Esteban";
+		String apellido = "Quito";
+		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+		String obraSocial = "OSDE";
+		Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial, obraSocial);
+		
+		Integer idPuerta = 1;
+		Puerta puerta = new Puerta(idPuerta);
+		
+		empresa.agregarPuerta(puerta);
+		empresa.agregarEmpleado(efectivo);
+		empresa.agregarCredencial(credencial);
+		empresa.agregarPermisoACredencial(idPuerta, idCredencial);
+		
+		empresa.registrarAcceso(efectivo,puerta);
+		
+		assertEquals(1,empresa.getAccesos().size());
+	}
+	@Test
+	public void queNoSePuedaRegistrarUnAccesoEnLaEmpresaCuandoLaCredencialDelEmpleadoNoTienePermisoParaAccederAUnaPuerta() {
+		Empresa empresa = new Empresa("Queremos aprobar");
+		
+		Integer idCredencial = 1;
+		Credencial credencial = new Credencial(idCredencial);
+		
+		Integer legajo = 123;
+		String nombreEmpleado = "Esteban";
+		String apellido = "Quito";
+		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+		String obraSocial = "OSDE";
+		Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial, obraSocial);
+		
+		Integer idPuerta = 1;
+		Puerta puerta = new Puerta(idPuerta);
+		
+		empresa.agregarPuerta(puerta);
+		empresa.agregarEmpleado(efectivo);
+		empresa.agregarCredencial(efectivo.getCredencial());
+		
+		empresa.registrarAcceso(efectivo,puerta);
+		
+		assertEquals(0,empresa.getAccesos().size());
+	}
+
 }

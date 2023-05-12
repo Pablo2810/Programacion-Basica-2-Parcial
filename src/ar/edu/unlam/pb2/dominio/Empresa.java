@@ -1,5 +1,7 @@
 package ar.edu.unlam.pb2.dominio;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class Empresa {
@@ -8,12 +10,14 @@ public class Empresa {
 	private HashSet<Puerta> puertas;
 	private HashSet<Empleado> empleados;
 	private HashSet<Credencial> credenciales;
+	private ArrayList<Acceso> accesos;
 
 	public Empresa(String nombre) {
 		this.nombre = nombre;
 		this.puertas = new HashSet<Puerta>();
 		this.empleados = new HashSet<Empleado>();
 		this.credenciales = new HashSet<Credencial>();
+		this.accesos = new ArrayList<Acceso>();
 	}
 
 	public String getNombre() {
@@ -80,6 +84,14 @@ public class Empresa {
 		this.credenciales = credenciales;
 	}
 
+	public ArrayList<Acceso> getAccesos() {
+		return accesos;
+	}
+
+	public void setAccesos(ArrayList<Acceso> accesos) {
+		this.accesos = accesos;
+	}
+
 	public void agregarCredencial(Credencial credencial) {
 		credencial.setEstado(Estado.DESACTIVADA);
 		this.credenciales.add(credencial);
@@ -109,6 +121,29 @@ public class Empresa {
 			}
 		}
 		
+	}
+
+	public void registrarAcceso(Empleado empleado, Puerta puerta) {
+		if(empleado.getCredencial().buscarPermiso(puerta.getIdPuerta()) != null) {
+			this.accesos.add(new Acceso(puerta,empleado,LocalDateTime.now()));
+		}
+	}
+
+	// Agrega un permiso a una credencial especifica si la encuentra dentro del listado de credenciales.
+	public void agregarPermisoACredencial(Integer permiso, Integer idCredencial) {
+		if(buscarCredencialPorId(idCredencial) != null) {
+			buscarCredencialPorId(idCredencial).agregarPermiso(permiso);
+		}
+	}
+
+	// Busca una credencial por IdCredencial en el listado de credenciales.
+	public Credencial buscarCredencialPorId(Integer idCredencial) {
+		for (Credencial credencial : credenciales) {
+			if(credencial.getId().equals(idCredencial)) {
+				return credencial;
+			}
+		}
+		return null;
 	}
 	
 
