@@ -182,6 +182,35 @@ public class Empresa {
 		return listaAccesos;
 
 	}
+
+	public ArrayList<Empleado> obtenerListaEmpleadosGenerales() {
+		ArrayList<Empleado> listaEmpleadosGenerales = new ArrayList<Empleado>();
+		for (Empleado empleado : empleados) {
+			listaEmpleadosGenerales.add(empleado);
+		}
+		
+		return listaEmpleadosGenerales;
+	}
+
+	public ArrayList<Empleado> obtenerListaEmpleadosEfectivos() {
+		ArrayList<Empleado> listaEmpleadosEfectivos = new ArrayList<Empleado>();
+		for (Empleado empleado : empleados) {
+			if(empleado instanceof Efectivo) {
+				listaEmpleadosEfectivos.add(empleado);
+			}
+		}
+		return listaEmpleadosEfectivos;
+	}
+
+	public ArrayList<Empleado> obtenerListaEmpleadosContratados() {
+		ArrayList<Empleado> listaEmpleadosContratados = new ArrayList<Empleado>();
+		for (Empleado empleado : empleados) {
+			if(empleado instanceof Contratado) {
+				listaEmpleadosContratados.add(empleado);
+			}
+		}
+		return listaEmpleadosContratados;
+	}
 	
 
 }

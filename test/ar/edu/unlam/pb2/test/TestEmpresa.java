@@ -388,5 +388,108 @@ public class TestEmpresa {
 		
 		assertEquals(valEsp, valObt);
 	}
+	
+	@Test
+	public void queSePuedaObtenerUnaListaDeEmpleadosGenerales() {
+		
+		String nombre = "Queremos Aprobar";
+		Integer legajo = 123;
+		String nombreEmpleado = "Esteban";
+		String apellido = "Quito";
+		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+		LocalDate fechaEgreso = LocalDate.parse("2023-01-04");
+		String obraSocial = "OSDE";
+
+		Empresa empresa = new Empresa(nombre);
+		Credencial credencial1 = new Credencial(1);
+		Credencial credencial2 = new Credencial(2);
+		Credencial credencial3 = new Credencial(3);
+		Credencial credencial4 = new Credencial(4);
+		Empleado efectivo1 = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial1, obraSocial);
+		Empleado efectivo2 = new Efectivo(132, nombreEmpleado, apellido, fechaIngreso, credencial2, obraSocial);
+		Empleado contratado1 = new Contratado(213, nombreEmpleado, apellido, fechaIngreso, credencial3, fechaEgreso);
+		Empleado contratado2 = new Contratado(312, nombreEmpleado, apellido, fechaIngreso, credencial4, fechaEgreso);
+		empresa.agregarEmpleado(efectivo1);
+		empresa.agregarEmpleado(efectivo2);
+		empresa.agregarEmpleado(contratado1);
+		empresa.agregarEmpleado(contratado2);
+		ArrayList<Empleado> listaEmpleadosGenerales = empresa.obtenerListaEmpleadosGenerales();
+		int valorEsperado = 4;
+		
+		assertEquals(valorEsperado, listaEmpleadosGenerales.size());
+		
+		
+	}
+	
+	@Test
+	public void queSePuedaObtenerUnaListaDeEmpleadosEfectivos() {
+		
+		String nombre = "Queremos Aprobar";
+		Integer legajo = 123;
+		String nombreEmpleado = "Esteban";
+		String apellido = "Quito";
+		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+		LocalDate fechaEgreso = LocalDate.parse("2023-01-04");
+		String obraSocial = "OSDE";
+
+		Empresa empresa = new Empresa(nombre);
+		Credencial credencial1 = new Credencial(1);
+		Credencial credencial2 = new Credencial(2);
+		Credencial credencial3 = new Credencial(3);
+		Credencial credencial4 = new Credencial(4);
+		Credencial credencial5 = new Credencial(5);
+		Empleado efectivo1 = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial1, obraSocial);
+		Empleado efectivo2 = new Efectivo(132, nombreEmpleado, apellido, fechaIngreso, credencial2, obraSocial);
+		Empleado efectivo3 = new Efectivo(231, nombreEmpleado, apellido, fechaIngreso, credencial5, obraSocial);
+		Empleado contratado1 = new Contratado(213, nombreEmpleado, apellido, fechaIngreso, credencial3, fechaEgreso);
+		Empleado contratado2 = new Contratado(312, nombreEmpleado, apellido, fechaIngreso, credencial4, fechaEgreso);
+		empresa.agregarEmpleado(efectivo1);
+		empresa.agregarEmpleado(efectivo2);
+		empresa.agregarEmpleado(efectivo3);
+		empresa.agregarEmpleado(contratado1);
+		empresa.agregarEmpleado(contratado2);
+		ArrayList<Empleado> listaEmpleadosEfectivos = empresa.obtenerListaEmpleadosEfectivos();
+		int valorEsperado = 3;
+		
+		assertEquals(valorEsperado, listaEmpleadosEfectivos.size());
+		
+		
+	}
+	
+	@Test
+	public void queSePuedaObtenerUnaListaDeEmpleadosContratados() {
+		
+		String nombre = "Queremos Aprobar";
+		Integer legajo = 123;
+		String nombreEmpleado = "Esteban";
+		String apellido = "Quito";
+		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+		LocalDate fechaEgreso = LocalDate.parse("2023-01-04");
+		String obraSocial = "OSDE";
+
+		Empresa empresa = new Empresa(nombre);
+		Credencial credencial1 = new Credencial(1);
+		Credencial credencial2 = new Credencial(2);
+		Credencial credencial3 = new Credencial(3);
+		Credencial credencial4 = new Credencial(4);
+		Credencial credencial5 = new Credencial(5);
+		Empleado efectivo1 = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial1, obraSocial);
+		Empleado efectivo2 = new Efectivo(132, nombreEmpleado, apellido, fechaIngreso, credencial2, obraSocial);
+		Empleado contratado1 = new Contratado(213, nombreEmpleado, apellido, fechaIngreso, credencial3, fechaEgreso);
+		Empleado contratado2 = new Contratado(312, nombreEmpleado, apellido, fechaIngreso, credencial4, fechaEgreso);
+		Empleado contratado3 = new Contratado(231, nombreEmpleado, apellido, fechaIngreso, credencial5, fechaEgreso);
+		empresa.agregarEmpleado(efectivo1);
+		empresa.agregarEmpleado(efectivo2);
+		empresa.agregarEmpleado(contratado1);
+		empresa.agregarEmpleado(contratado2);
+		empresa.agregarEmpleado(contratado3);
+		ArrayList<Empleado> listaEmpleadosContratados = empresa.obtenerListaEmpleadosContratados();
+		int valorEsperado = 3;
+		
+		assertEquals(valorEsperado, listaEmpleadosContratados.size());
+		
+		
+	}
+
 
 }
