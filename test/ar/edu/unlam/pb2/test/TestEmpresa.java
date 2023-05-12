@@ -490,6 +490,77 @@ public class TestEmpresa {
 		
 		
 	}
+	
+	@Test
+	public void queSePuedaObtenerUnEmpleadoPorSuLegajo() {
+		
+		String nombre = "Queremos Aprobar";
+		Integer legajo = 123;
+		String nombreEmpleado = "Esteban";
+		String apellido = "Quito";
+		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+		LocalDate fechaEgreso = LocalDate.parse("2023-01-04");
+		String obraSocial = "OSDE";
 
+		Empresa empresa = new Empresa(nombre);
+		Credencial credencial1 = new Credencial(1);
+		Credencial credencial2 = new Credencial(2);
+		Credencial credencial3 = new Credencial(3);
+		Credencial credencial4 = new Credencial(4);
+		Credencial credencial5 = new Credencial(5);
+		Empleado efectivo1 = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial1, obraSocial);
+		Empleado efectivo2 = new Efectivo(132, nombreEmpleado, apellido, fechaIngreso, credencial2, obraSocial);
+		Empleado contratado1 = new Contratado(213, nombreEmpleado, apellido, fechaIngreso, credencial3, fechaEgreso);
+		Empleado contratado2 = new Contratado(312, "Juan", apellido, fechaIngreso, credencial4, fechaEgreso);
+		Empleado contratado3 = new Contratado(231, nombreEmpleado, apellido, fechaIngreso, credencial5, fechaEgreso);
+		empresa.agregarEmpleado(efectivo1);
+		empresa.agregarEmpleado(efectivo2);
+		empresa.agregarEmpleado(contratado1);
+		empresa.agregarEmpleado(contratado2);
+		empresa.agregarEmpleado(contratado3);
+		Empleado empleadoObtenido = empresa.obtenerEmpleadoPorLegajo(312);
+		int valorEsperado = 312;
+		int valorObtenido = empleadoObtenido.getLegajo();
+		
+		assertEquals(empleadoObtenido.getNombre(), "Juan");
+		assertEquals(valorEsperado, 312);
+		
+	}
+	
+	@Test
+	public void queSePuedaObtenerUnaListaDeEmpleadosIngresadosEnUnaFechaEspecifica() {
+		
+		String nombre = "Queremos Aprobar";
+		Integer legajo = 123;
+		String nombreEmpleado = "Esteban";
+		String apellido = "Quito";
+		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+		LocalDate fechaIngreso2 = LocalDate.parse("2022-01-01");
+		LocalDate fechaIngreso3 = LocalDate.parse("2022-01-01");
+		LocalDate fechaIngreso4 = LocalDate.parse("2022-01-01");
+		LocalDate fechaEgreso = LocalDate.parse("2023-01-04");
+		LocalDate fechaDeBusqueda = LocalDate.parse("2022-01-01");
+		String obraSocial = "OSDE";
+
+		Empresa empresa = new Empresa(nombre);
+		Credencial credencial1 = new Credencial(1);
+		Credencial credencial2 = new Credencial(2);
+		Credencial credencial3 = new Credencial(3);
+		Credencial credencial4 = new Credencial(4);
+		Empleado efectivo1 = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial1, obraSocial);
+		Empleado efectivo2 = new Efectivo(132, nombreEmpleado, apellido, fechaIngreso2, credencial2, obraSocial);
+		Empleado contratado1 = new Contratado(213, nombreEmpleado, apellido, fechaIngreso3, credencial3, fechaEgreso);
+		Empleado contratado2 = new Contratado(312, nombreEmpleado, apellido, fechaIngreso4, credencial4, fechaEgreso);
+		empresa.agregarEmpleado(efectivo1);
+		empresa.agregarEmpleado(efectivo2);
+		empresa.agregarEmpleado(contratado1);
+		empresa.agregarEmpleado(contratado2);
+		ArrayList<Empleado> listaEmpleadosEnFechaEspecifica = empresa.obtenerListaEmpleadosEnFechaEspecifica(fechaDeBusqueda);
+		int valorEsperado = 3;
+		
+		assertEquals(valorEsperado, listaEmpleadosEnFechaEspecifica.size());
+		
+		
+	}
 
 }

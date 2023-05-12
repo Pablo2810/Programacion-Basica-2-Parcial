@@ -1,5 +1,6 @@
 package ar.edu.unlam.pb2.dominio;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -210,6 +211,26 @@ public class Empresa {
 			}
 		}
 		return listaEmpleadosContratados;
+	}
+
+	public Empleado obtenerEmpleadoPorLegajo(int legajo) {
+		
+		for (Empleado empleado : empleados) {
+			if(empleado.getLegajo().equals(legajo)) {
+				return empleado;
+			}
+		}
+		return null;
+	}
+
+	public ArrayList<Empleado> obtenerListaEmpleadosEnFechaEspecifica(LocalDate fechaDeBusqueda) {
+		ArrayList<Empleado> listaEmpleadosEnFechaEspecifica = new ArrayList<Empleado>();
+		for (Empleado empleado : empleados) {
+			if(empleado.getFechaIngreso().equals(fechaDeBusqueda)) {
+				listaEmpleadosEnFechaEspecifica.add(empleado);
+			}
+		}
+		return listaEmpleadosEnFechaEspecifica;
 	}
 	
 
