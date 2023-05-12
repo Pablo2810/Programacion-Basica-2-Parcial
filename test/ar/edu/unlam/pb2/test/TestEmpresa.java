@@ -2,10 +2,15 @@ package ar.edu.unlam.pb2.test;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.junit.Test;
 
+import ar.edu.unlam.pb2.dominio.Acceso;
+import ar.edu.unlam.pb2.dominio.Contratado;
 import ar.edu.unlam.pb2.dominio.Credencial;
 import ar.edu.unlam.pb2.dominio.Efectivo;
 import ar.edu.unlam.pb2.dominio.Empleado;
@@ -299,5 +304,54 @@ public class TestEmpresa {
 		
 		assertEquals(0,empresa.getAccesos().size());
 	}
-
+	
+	@Test
+	public void queSePuedaObtenerUnListadoDeAccesosPorNumeroDePuerta() {
+		Empresa empresa = new Empresa("Queremos Aprobar");
+		
+		Puerta puertaA = new Puerta(1);
+		Puerta puertaB = new Puerta(2);
+		Puerta puertaC = new Puerta(3);
+		Puerta puertaD = new Puerta(4);
+		
+		Credencial credencial = new Credencial(1);
+		
+		Empleado efectivo = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), credencial, "OSDE");
+		Empleado contratado = new Contratado(1, "Carlos", "Lopez", LocalDate.parse("2023-01-01"), LocalDate.parse("2023-01-02"));
+		
+		empresa.agregarPuerta(puertaA);
+		empresa.agregarPuerta(puertaB);
+		empresa.agregarPuerta(puertaC);
+		empresa.agregarPuerta(puertaD);
+		
+		empresa.agregarCredencial(credencial);
+		
+		empresa.agregarPermisoACredencial(puertaA.getIdPuerta(), credencial.getId());
+		empresa.agregarPermisoACredencial(puertaB.getIdPuerta(), credencial.getId());
+		empresa.agregarPermisoACredencial(puertaC.getIdPuerta(), credencial.getId());
+		empresa.agregarPermisoACredencial(puertaD.getIdPuerta(), credencial.getId());
+		
+		empresa.agregarEmpleado(efectivo);
+		empresa.agregarEmpleado(contratado);
+		
+		empresa.asignarCredencialParaEmpleado(contratado, credencial);
+		
+		empresa.registrarAcceso(efectivo,puertaA);
+		empresa.registrarAcceso(contratado, puertaB);
+		empresa.registrarAcceso(contratado, puertaA);
+		empresa.registrarAcceso(efectivo, puertaC);
+		empresa.registrarAcceso(efectivo, puertaA);
+		empresa.registrarAcceso(efectivo, puertaB);
+		
+		ArrayList<Acceso> listaAccesosPorPuerta = empresa.obtenerListadoAccesosPorNroPuerta(2);
+		
+		Integer valEsp = 2;
+		Integer valObt = listaAccesosPorPuerta.size();
+		
+//		for (Acceso acceso : listaAccesosPorPuerta) {
+//			System.out.println(acceso.getEmpleado().getApellido());
+//		}
+		
+		assertEquals(valEsp, valObt);
+	}
 }

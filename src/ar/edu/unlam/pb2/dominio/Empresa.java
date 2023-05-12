@@ -2,6 +2,7 @@ package ar.edu.unlam.pb2.dominio;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class Empresa {
@@ -159,6 +160,16 @@ public class Empresa {
 			}
 		}
 		return null;
+	}
+
+	public ArrayList<Acceso> obtenerListadoAccesosPorNroPuerta(Integer idPuerta) {
+		ArrayList<Acceso> listaAccesos = new ArrayList<>();
+		for (Acceso acceso : accesos) {
+			if (acceso.getPuerta().getIdPuerta().equals(idPuerta)) {
+				listaAccesos.add(acceso);
+			}
+		}
+		return listaAccesos;
 	}
 	
 
