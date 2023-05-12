@@ -40,27 +40,33 @@ public class Empresa {
 		this.puertas = puertas;
 	}
 
-	public void agregarEmpleado(Empleado empleado) {
-		
-		if(this.empleados.isEmpty() && this.credenciales.isEmpty()) {
-			this.empleados.add(empleado);
-			if(empleado.getCredencial() != null) {
-			this.agregarCredencialActivada(empleado.getCredencial());
-			 }
-			
-		}else {
-			for (Credencial credencialObtenida : credenciales) {
-				if(!credencialObtenida.getId().equals(empleado.getCredencial().getId())) {
-					this.empleados.add(empleado);
-					this.agregarCredencialActivada(empleado.getCredencial());
-		}
-			}
-			
-		}
-		
+//	public void agregarEmpleado(Empleado empleado) {
+//		
+//		if(this.empleados.isEmpty() && this.credenciales.isEmpty()) {
+//			this.empleados.add(empleado);
+//			if(empleado.getCredencial() != null) {
+//			this.agregarCredencialActivada(empleado.getCredencial());
+//			 }
+//			
+//		}else {
+//			for (Credencial credencialObtenida : credenciales) {
+//				if(!credencialObtenida.getId().equals(empleado.getCredencial().getId())) {
+//					this.empleados.add(empleado);
+//					this.agregarCredencialActivada(empleado.getCredencial());
+//		}
+//			}
+//			
+//		}
+//		
+//	
+//	}
 	
+	public void agregarEmpleado(Empleado empleado) {
+		if (!this.credenciales.contains(empleado.getCredencial())) {
+			this.empleados.add(empleado);
+			this.credenciales.add(empleado.getCredencial());
+		}
 	}
-		
 
 	private void agregarCredencialActivada(Credencial credencial) {
 		credencial.setEstado(Estado.ACTIVADA);
@@ -97,15 +103,24 @@ public class Empresa {
 		this.credenciales.add(credencial);
 	}
 
-	public void asignarCredencialDesactivadaYActivarla(Empleado empleado) {
-		
-		for (Credencial credencial : credenciales) {
-			if(credencial.getEstado().equals(Estado.DESACTIVADA)) {
-				credencial.setEstado(Estado.ACTIVADA);
-				empleado.setCredencial(credencial);
-			}
+//	public void asignarCredencialDesactivadaYActivarla(Empleado empleado) {
+//		
+//		for (Credencial credencial : credenciales) {
+//			if(credencial.getEstado().equals(Estado.DESACTIVADA)) {
+//				credencial.setEstado(Estado.ACTIVADA);
+//				empleado.setCredencial(credencial);
+//			}
+//		}
+//		
+//	}
+	
+	public void asignarCredencialParaEmpleado(Empleado empleado, Credencial credencial) {
+		if (empleado.getCredencial() == null) {
+			empleado.setCredencial(credencial);
+			credencial.setEstado(Estado.ACTIVADA);
+		} else {
+			System.out.println("El empleado ya tiene una credencial");
 		}
-		
 	}
 
 	public void eliminarEmpleadoYDesactivarCredencial(Empleado empleado) {

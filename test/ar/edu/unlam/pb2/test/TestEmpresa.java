@@ -28,6 +28,7 @@ public class TestEmpresa {
 		
 		assertEquals(CANTIDAD_ESPERADA,empresa.getPuertas().size());
 	}
+	
 	@Test
 	public void queNoSePuedaAgregarDosPuertasConElMismoNumeroDePuertaAUnaEmpresa() {
 		int CANTIDAD_ESPERADA = 1;
@@ -58,6 +59,7 @@ public class TestEmpresa {
 		Empresa empresa = new Empresa(nombre);
 		Credencial credencial = new Credencial(idCredencial);
 		Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial, obraSocial);
+		
 		empresa.agregarEmpleado(efectivo);
 		int CANTIDAD_ESPERADA = 1;
 		
@@ -66,15 +68,16 @@ public class TestEmpresa {
 	
 	@Test
 	public void queSePuedaAgregarUnEmpleadoSinCredencialAUnaEmpresa() {
-		String nombre = "Queremos Aprobar";
-		Integer legajo = 123;
-		String nombreEmpleado = "Esteban";
-		String apellido = "Quito";
-		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
-		String obraSocial = "OSDE";
-
-		Empresa empresa = new Empresa(nombre);
-		Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, obraSocial);
+//		String nombre = "Queremos Aprobar";
+//		Integer legajo = 123;
+//		String nombreEmpleado = "Esteban";
+//		String apellido = "Quito";
+//		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+//		String obraSocial = "OSDE";
+		
+		Empresa empresa = new Empresa("Queremos Aprobar");
+		Empleado efectivo = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), "OSDE");
+		
 		empresa.agregarEmpleado(efectivo);
 		int CANTIDAD_ESPERADA = 1;
 		
@@ -84,72 +87,85 @@ public class TestEmpresa {
 	
 	@Test
 	public void queNoSePuedanAgregarDosEmpleadosConElMismoLegajoYCredencialAUnaEmpresa() {
-		String nombre = "Queremos Aprobar";
-		Integer legajo = 123;
-		String nombreEmpleado = "Esteban";
-		String nombreEmpleado2 = "Gonzalo";
-		String apellido = "Quito";
-		String apellido2 = "Gonzales";
-		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
-		Integer idCredencial = 1;
-		String obraSocial = "OSDE";
-		int CANTIDAD_ESPERADA = 1;
-
-		Empresa empresa = new Empresa(nombre);
-		Credencial credencial = new Credencial(idCredencial);
-		Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial, obraSocial);
-		Empleado efectivo2 = new Efectivo(legajo, nombreEmpleado2, apellido2, fechaIngreso, credencial, obraSocial);
+//		String nombre = "Queremos Aprobar";
+//		Integer legajo = 123;
+//		String nombreEmpleado = "Esteban";
+//		String nombreEmpleado2 = "Gonzalo";
+//		String apellido = "Quito";
+//		String apellido2 = "Gonzales";
+//		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+//		Integer idCredencial = 1;
+//		String obraSocial = "OSDE";
+//		int CANTIDAD_ESPERADA = 1;
+		Empresa empresa = new Empresa("Queremos Aprobar");
+		
+		Credencial credencial = new Credencial(1);
+		
+		Empleado efectivo = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), credencial, "OSDE");
+		Empleado efectivo2 = new Efectivo(123, "Gonzalo", "Gonzales", LocalDate.parse("2023-01-01"), credencial, "OSDE");
+		
 		empresa.agregarEmpleado(efectivo);
 		empresa.agregarEmpleado(efectivo2);
 		
-		assertEquals(CANTIDAD_ESPERADA,empresa.getEmpleados().size());
+		assertEquals(1,empresa.getEmpleados().size());
 	}
 	
 	@Test
 	public void queNoSePuedaAgregarUnEmpleadoConUnaCredencialAnteriorMenteRegistrada() {
-		String nombre = "Queremos Aprobar";
-		Integer legajo = 123;
-		String nombreEmpleado = "Esteban";
-		String apellido = "Quito";
-		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
-		Integer idCredencial = 1;
-		String obraSocial = "OSDE";
-		int CANTIDAD_EMPLEADOS_ESPERADOS = 0;
-		int CANTIDAD_CREDENCIALES_ESPERADAS = 1;
+//		String nombre = "Queremos Aprobar";
+//		Integer legajo = 123;
+//		String nombreEmpleado = "Esteban";
+//		String apellido = "Quito";
+//		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+//		Integer idCredencial = 1;
+//		String obraSocial = "OSDE";
+//		int CANTIDAD_EMPLEADOS_ESPERADOS = 0;
+//		int CANTIDAD_CREDENCIALES_ESPERADAS = 1;
 
-		Empresa empresa = new Empresa(nombre);
-		Credencial credencial = new Credencial(idCredencial);
-		Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial, obraSocial);
+		Empresa empresa = new Empresa("Queremos Aprobar");
+		
+		Credencial credencial = new Credencial(1);
+		
+		Empleado efectivoA = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), credencial, "OSDE");
+		Empleado efectivoB = new Efectivo(456, "A", "A", LocalDate.parse("2023-01-01"), "UP");
+		
 		empresa.agregarCredencial(credencial);
-		empresa.agregarEmpleado(efectivo);
+		empresa.agregarEmpleado(efectivoA);
+		//empresa.agregarEmpleado(efectivoB);
 
-		assertEquals(CANTIDAD_EMPLEADOS_ESPERADOS,empresa.getEmpleados().size());
-		assertEquals(CANTIDAD_CREDENCIALES_ESPERADAS,empresa.getCredenciales().size());
+		assertEquals(0,empresa.getEmpleados().size());
+		assertEquals(1,empresa.getCredenciales().size());
 		
 		
 	}
 	
 		@Test
 	 	public void queSeLePuedaAsignarUnaCredencialAnteriormenteRegistradaAUnEmpleadoYActivarla() {
-			String nombre = "Queremos Aprobar";
-			Integer legajo = 123;
-			String nombreEmpleado = "Esteban";
-			String apellido = "Quito";
-			LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
-			String obraSocial = "OSDE";
-			Integer idCredencial = 1;
+//			String nombre = "Queremos Aprobar";
+//			Integer legajo = 123;
+//			String nombreEmpleado = "Esteban";
+//			String apellido = "Quito";
+//			LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+//			String obraSocial = "OSDE";
+//			Integer idCredencial = 1;
 			
-			Empresa empresa = new Empresa(nombre);
-			Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, obraSocial);
-			Credencial credencial = new Credencial(idCredencial);
+			Empresa empresa = new Empresa("Queremos Aprobar");
+			
+			Credencial credencial = new Credencial(1);
+			
+			Empleado efectivoA = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), credencial, "OSDE");
+			Empleado efectivoB = new Efectivo(456, "A", "A", LocalDate.parse("2023-01-01"), "UP");
+			
 			empresa.agregarCredencial(credencial);
-			empresa.asignarCredencialDesactivadaYActivarla(efectivo);
-			Integer valorObtenido = efectivo.getCredencial().getId();
-			Estado estadoEsperado = Estado.ACTIVADA;
-			Estado estadoObtenido = efectivo.getCredencial().getEstado();
 			
-
-			assertEquals(idCredencial, valorObtenido);
+			empresa.asignarCredencialParaEmpleado(efectivoB, credencial);
+			
+			Integer valorObtenido = efectivoB.getCredencial().getId(); //1
+			
+			Estado estadoEsperado = Estado.ACTIVADA;
+			Estado estadoObtenido = efectivoA.getCredencial().getEstado();
+			
+			assertEquals(credencial.getId(), valorObtenido);
 			assertEquals(estadoEsperado, estadoObtenido);
 			
 		}
