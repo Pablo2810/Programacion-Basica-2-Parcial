@@ -160,6 +160,16 @@ public class Empresa {
 		}
 		return null;
 	}
+
+	public ArrayList<Acceso> obtenerListadoAccesosPorLegajoDeEmpleado(Integer legajo) {
+		ArrayList<Acceso> listaAccesosFiltrada = new ArrayList<>();
+		for (Acceso acceso : this.accesos) {
+			if(acceso.getEmpleado().getLegajo().equals(legajo)) {
+				listaAccesosFiltrada.add(acceso);
+			}
+		}
+		return listaAccesosFiltrada;
+	}
 	
 
 }

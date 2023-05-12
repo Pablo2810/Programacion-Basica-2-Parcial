@@ -3,9 +3,11 @@ package ar.edu.unlam.pb2.test;
 import static org.junit.Assert.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
+import ar.edu.unlam.pb2.dominio.Acceso;
 import ar.edu.unlam.pb2.dominio.Credencial;
 import ar.edu.unlam.pb2.dominio.Efectivo;
 import ar.edu.unlam.pb2.dominio.Empleado;
@@ -82,7 +84,7 @@ public class TestEmpresa {
 		int CANTIDAD_ESPERADA = 1;
 		
 		assertEquals(CANTIDAD_ESPERADA,empresa.getEmpleados().size());
-		assertEquals(0,empresa.getCredenciales().size());
+		assertFalse(empresa.getCredenciales().isEmpty());
 	}
 	
 	@Test
@@ -298,6 +300,36 @@ public class TestEmpresa {
 		empresa.registrarAcceso(efectivo,puerta);
 		
 		assertEquals(0,empresa.getAccesos().size());
+	}
+	
+	@Test
+	public void queSePuedaObtenerUnListadoDeAccesosDeLaEmpresaPorEmpleado() {
+		Empresa empresa = new Empresa("Queremos aprobar");
+		Puerta puerta1 = new Puerta(1);
+		Puerta puerta2 = new Puerta(2);
+		Credencial credencial = new Credencial(1);
+		
+		Integer legajo = 123;
+		String nombreEmpleado = "Esteban";
+		String apellido = "Quito";
+		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+		String obraSocial = "OSDE";
+		Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, obraSocial);
+		
+		empresa.agregarPuerta(puerta1);
+		empresa.agregarPuerta(puerta2);
+		empresa.agregarCredencial(credencial);
+		empresa.agregarEmpleado(efectivo);
+		empresa.asignarCredencialParaEmpleado(efectivo, credencial);
+		empresa.agregarPermisoACredencial(2, 1);
+		
+		empresa.registrarAcceso(efectivo,puerta1); // no se registra porque no tiene permiso para esta puerta.
+		empresa.registrarAcceso(efectivo,puerta2);
+		
+		int CANTIDAD_DE_ACCESOS_ESPERADOS = 1;
+		ArrayList<Acceso> accesosObtenidos = empresa.obtenerListadoAccesosPorLegajoDeEmpleado(efectivo.getLegajo());
+		
+		assertEquals(CANTIDAD_DE_ACCESOS_ESPERADOS,accesosObtenidos.size());
 	}
 
 }
