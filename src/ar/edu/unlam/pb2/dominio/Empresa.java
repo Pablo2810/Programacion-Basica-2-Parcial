@@ -14,6 +14,8 @@ public class Empresa {
 	private HashSet<Credencial> credenciales;
 	private ArrayList<Acceso> accesos;
 
+	/********************************/
+	
 	public Empresa(String nombre) {
 		this.nombre = nombre;
 		this.puertas = new HashSet<Puerta>();
@@ -22,6 +24,8 @@ public class Empresa {
 		this.accesos = new ArrayList<Acceso>();
 	}
 
+	/********************************/
+	
 	public String getNombre() {
 		return nombre;
 	}
@@ -29,11 +33,7 @@ public class Empresa {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
-	public void agregarPuerta(Puerta puerta) {
-		puertas.add(puerta);
-	}
-
+	
 	public HashSet<Puerta> getPuertas() {
 		return puertas;
 	}
@@ -41,41 +41,7 @@ public class Empresa {
 	public void setPuertas(HashSet<Puerta> puertas) {
 		this.puertas = puertas;
 	}
-
-//	public void agregarEmpleado(Empleado empleado) {
-//		
-//		if(this.empleados.isEmpty() && this.credenciales.isEmpty()) {
-//			this.empleados.add(empleado);
-//			if(empleado.getCredencial() != null) {
-//			this.agregarCredencialActivada(empleado.getCredencial());
-//			 }
-//			
-//		}else {
-//			for (Credencial credencialObtenida : credenciales) {
-//				if(!credencialObtenida.getId().equals(empleado.getCredencial().getId())) {
-//					this.empleados.add(empleado);
-//					this.agregarCredencialActivada(empleado.getCredencial());
-//		}
-//			}
-//			
-//		}
-//		
-//	
-//	}
 	
-	public void agregarEmpleado(Empleado empleado) {
-		if (!this.credenciales.contains(empleado.getCredencial())) {
-			this.empleados.add(empleado);
-			this.credenciales.add(empleado.getCredencial());
-		}
-	}
-
-	private void agregarCredencialActivada(Credencial credencial) {
-		credencial.setEstado(Estado.ACTIVADA);
-		this.credenciales.add(credencial);
-		
-	}
-
 	public HashSet<Empleado> getEmpleados() {
 		return empleados;
 	}
@@ -99,22 +65,31 @@ public class Empresa {
 	public void setAccesos(ArrayList<Acceso> accesos) {
 		this.accesos = accesos;
 	}
+	
+	/********************************/
+	
+	public void agregarPuerta(Puerta puerta) {
+		puertas.add(puerta);
+	}
 
+	public void agregarEmpleado(Empleado empleado) {
+		if (!this.credenciales.contains(empleado.getCredencial())) {
+			this.empleados.add(empleado);
+			this.credenciales.add(empleado.getCredencial());
+		}
+	}
+	
 	public void agregarCredencial(Credencial credencial) {
 		credencial.setEstado(Estado.DESACTIVADA);
 		this.credenciales.add(credencial);
 	}
-
-//	public void asignarCredencialDesactivadaYActivarla(Empleado empleado) {
-//		
-//		for (Credencial credencial : credenciales) {
-//			if(credencial.getEstado().equals(Estado.DESACTIVADA)) {
-//				credencial.setEstado(Estado.ACTIVADA);
-//				empleado.setCredencial(credencial);
-//			}
-//		}
-//		
+	
+//	private void agregarCredencialActivada(Credencial credencial) {
+//		credencial.setEstado(Estado.ACTIVADA);
+//		this.credenciales.add(credencial);
 //	}
+	
+	/********************************/
 	
 	public void asignarCredencialParaEmpleado(Empleado empleado, Credencial credencial) {
 		if (empleado.getCredencial() == null) {
@@ -126,7 +101,6 @@ public class Empresa {
 	}
 
 	public void eliminarEmpleadoYDesactivarCredencial(Empleado empleado) {
-		
 		for (Empleado empleadoObtenido : empleados) {
 			if(empleadoObtenido.getLegajo().equals(empleado.getLegajo())) {
 				for (Credencial credencial : credenciales) {
@@ -231,6 +205,19 @@ public class Empresa {
 			}
 		}
 		return listaEmpleadosEnFechaEspecifica;
+	}
+
+	public ArrayList<Empleado> obtenerListadoEmpleadoPorPuerta(Puerta puerta) {
+		ArrayList<Empleado> listaEmpleadosQueAccedieronPuertaEspecifica = new ArrayList<>();
+		for (Acceso acceso : accesos) {
+			if (acceso.getPuerta().equals(puerta)) {
+				Empleado empleado = acceso.getEmpleado();
+				if (!listaEmpleadosQueAccedieronPuertaEspecifica.contains(empleado)) {
+					listaEmpleadosQueAccedieronPuertaEspecifica.add(empleado);
+				}
+			}
+		}
+		return listaEmpleadosQueAccedieronPuertaEspecifica;
 	}
 	
 

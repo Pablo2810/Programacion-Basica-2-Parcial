@@ -562,5 +562,51 @@ public class TestEmpresa {
 		
 		
 	}
+	
+	@Test
+	public void queSePuedaObtenerUnaListaDeAccesosDeEmpleadosPorUnaPuertaEspecifica() {
+		Empresa empresa = new Empresa("Queremos aprobar");
+		
+		Credencial cred1 = new Credencial(1);
+		Credencial cred2 = new Credencial(2);
+		Credencial cred3 = new Credencial(3);
+		Credencial cred4 = new Credencial(4);
+		
+		Puerta puerta1 = new Puerta(1);
+		Puerta puerta2 = new Puerta(2);
+		Puerta puerta3 = new Puerta(3);
+		Puerta puerta4 = new Puerta(4);
+		
+		Empleado emp1 = new Efectivo(1, "David", "A", LocalDate.parse("2023-01-02"), cred1, "UP");
+		Empleado emp2 = new Efectivo(2, "Mirtha", "B", LocalDate.parse("2023-02-16"), cred2, "UP");
+		Empleado emp3 = new Contratado(3, "Carlos", "C", LocalDate.parse("2023-03-21"), cred3, LocalDate.parse("2023-10-10"));
+		Empleado emp4 = new Contratado(4, "Luna", "D", LocalDate.parse("2023-04-12"), cred4, LocalDate.parse("2023-10-10"));
+		
+		empresa.agregarEmpleado(emp1); 
+		empresa.agregarEmpleado(emp2);
+		empresa.agregarEmpleado(emp3);
+		empresa.agregarEmpleado(emp4);
 
+		//Si no agregamos este permiso de credencial la "puerta1" si la ponemos de parametro la lista estara vacia. No tiene permiso.
+		//empresa.agregarPermisoACredencial(puerta1.getIdPuerta(), cred1.getId()); 
+		empresa.agregarPermisoACredencial(puerta2.getIdPuerta(), cred1.getId());
+		empresa.agregarPermisoACredencial(puerta2.getIdPuerta(), cred2.getId());
+		empresa.agregarPermisoACredencial(puerta2.getIdPuerta(), cred3.getId());
+		
+		empresa.registrarAcceso(emp1, puerta1);
+		empresa.registrarAcceso(emp2, puerta2);
+		empresa.registrarAcceso(emp3, puerta3);
+		empresa.registrarAcceso(emp4, puerta4);
+		empresa.registrarAcceso(emp1, puerta2);
+		empresa.registrarAcceso(emp3, puerta2);
+		empresa.registrarAcceso(emp2, puerta2);
+		
+		ArrayList<Empleado> listaEmpleadosQueAccedieronPuerta = empresa.obtenerListadoEmpleadoPorPuerta(puerta2);
+		
+		
+		Integer valEsp = 3;
+		Integer valObt = listaEmpleadosQueAccedieronPuerta.size();
+		
+		assertEquals(valEsp, valObt);
+	}
 }
