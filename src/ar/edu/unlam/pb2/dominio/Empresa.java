@@ -72,19 +72,48 @@ public class Empresa {
 	}
 
 	public void agregarEmpleado(Empleado empleado) {
-		if (empleado instanceof Contratado) {
-			if (((Contratado) empleado).getContrato().getFechaCaducidad().isAfter(empleado.getFechaIngreso())) {
-				this.registrarCredencialesEmpleados(empleado);
+		if (empleado.getCredencial() == null) {
+			if (empleado instanceof Contratado) {
+				if (this.verificarFechaCaducidad(empleado)) {
+					this.registrarEmpleado(empleado);
+				}
+			} else {
+				this.registrarEmpleado(empleado);
 			}
 		} else {
-			this.registrarCredencialesEmpleados(empleado);
+			if (!this.verificarQueEmpleadoNoTengaMismaCredencial(empleado)) {
+				if (this.verificarFechaCaducidad(empleado)) {
+					this.registrarEmpleado(empleado);
+				} else {
+					this.registrarEmpleado(empleado);
+				}
+			}
 		}
 	}
 	
-	private void registrarCredencialesEmpleados(Empleado empleado) {
-		if (!this.credenciales.contains(empleado.getCredencial())) {
+	private Boolean verificarFechaCaducidad(Empleado empleado) {
+		if (empleado instanceof Contratado) {
+			if (((Contratado) empleado).getContrato().getFechaCaducidad().isAfter(empleado.getFechaIngreso())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private Boolean verificarQueEmpleadoNoTengaMismaCredencial(Empleado empleado) {
+		Boolean credecialUsada = false;
+		for (Empleado empl : empleados) {
+			if (empl.getCredencial().equals(empleado.getCredencial())) {
+				credecialUsada = true;
+			}
+		}
+		return credecialUsada;
+	}
+
+	private void registrarEmpleado(Empleado empleado) {
+		if (!this.credenciales.contains(empleado.getCredencial()) && empleado.getCredencial() != null) {
 			this.empleados.add(empleado);
-			this.credenciales.add(empleado.getCredencial());
+			this.agregarCredencial(empleado.getCredencial());;
 		} else {
 			this.empleados.add(empleado);
 		}

@@ -22,7 +22,6 @@ public class TestEmpresa {
 
 	@Test
 	public void queSePuedaAgregarUnaPuertaAUnaEmpresa() {
-		int CANTIDAD_ESPERADA = 1;
 		String nombre = "Queremos Aprobar";
 		Empresa empresa = new Empresa(nombre);
 		
@@ -31,44 +30,41 @@ public class TestEmpresa {
 		
 		empresa.agregarPuerta(puerta);
 		
-		assertEquals(CANTIDAD_ESPERADA,empresa.getPuertas().size());
+		assertEquals(1 , empresa.getPuertas().size());
 	}
 	
 	@Test
 	public void queNoSePuedaAgregarDosPuertasConElMismoNumeroDePuertaAUnaEmpresa() {
-		int CANTIDAD_ESPERADA = 1;
 		String nombre = "Queremos Aprobar";
 		Empresa empresa = new Empresa(nombre);
-		
-		Integer idPuerta = 1;
-		Puerta puerta = new Puerta(idPuerta);
-		Integer idPuerta2 = 1;
-		Puerta puerta2 = new Puerta(idPuerta2);
+	
+		Puerta puerta = new Puerta(1);
+		Puerta puerta2 = new Puerta(1);
 		
 		empresa.agregarPuerta(puerta);
 		empresa.agregarPuerta(puerta2);
 		
-		assertEquals(CANTIDAD_ESPERADA,empresa.getPuertas().size());
+		assertEquals(1 , empresa.getPuertas().size());
 	}
 	
 	@Test
 	public void queSePuedaAgregarUnEmpleadoAUnaEmpresa() {
 		String nombre = "Queremos Aprobar";
+		Empresa empresa = new Empresa(nombre);
+		
+		Integer idCredencial = 1;
+		Credencial credencial = new Credencial(idCredencial);
+		
 		Integer legajo = 123;
 		String nombreEmpleado = "Esteban";
 		String apellido = "Quito";
 		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
-		Integer idCredencial = 1;
 		String obraSocial = "OSDE";
-
-		Empresa empresa = new Empresa(nombre);
-		Credencial credencial = new Credencial(idCredencial);
 		Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial, obraSocial);
 		
 		empresa.agregarEmpleado(efectivo);
-		int CANTIDAD_ESPERADA = 1;
 		
-		assertEquals(CANTIDAD_ESPERADA,empresa.getEmpleados().size());
+		assertEquals(1 , empresa.getEmpleados().size());
 	}
 	
 	@Test
@@ -76,16 +72,14 @@ public class TestEmpresa {
 		Empresa empresa = new Empresa("Queremos aprobar");
 		
 		Empleado contratado1 = new Contratado(1, "Carlos", "Lopez", LocalDate.parse("2023-01-01"), LocalDate.parse("2023-12-20"));
-		Empleado contratado2 = new Contratado(2, "Esteban", "Lopez", LocalDate.parse("2023-12-10"), LocalDate.parse("2023-02-20"));
+		Empleado contratado2 = new Contratado(2, "Esteban", "Lopez", LocalDate.parse("2023-10-10"), LocalDate.parse("2023-09-09"));
 		
 		empresa.agregarEmpleado(contratado1);
-		empresa.agregarEmpleado(contratado2);
+		empresa.agregarEmpleado(contratado2); // X
 		
 		Integer valEsp = 1;
 		Integer valObt = empresa.getEmpleados().size();
-		for (Empleado empleado : empresa.getEmpleados()) {
-			System.out.println(empleado.getLegajo());
-		}
+		
 		assertEquals(valEsp, valObt);
 	}
 	
@@ -95,23 +89,38 @@ public class TestEmpresa {
 		Empleado efectivo = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), "OSDE");
 		
 		empresa.agregarEmpleado(efectivo);
-		int CANTIDAD_ESPERADA = 1;
 		
-		assertEquals(CANTIDAD_ESPERADA,empresa.getEmpleados().size());
-		assertFalse(empresa.getCredenciales().isEmpty());
+		assertEquals(1, empresa.getEmpleados().size());
+		assertEquals(0, empresa.getCredenciales().size());
 	}
 	
 	@Test
-	public void queNoSePuedanAgregarDosEmpleadosConElMismoLegajoYCredencialAUnaEmpresa() {
+	public void queNoSePuedanAgregarDosEmpleadosConElMismoLegajo() {
+		Empresa empresa = new Empresa("Queremos Aprobar");
+		
+		Credencial credencial = new Credencial(1);
+		Credencial otraCredencial = new Credencial(2);
+		
+		Empleado efectivo1 = new Efectivo(1, "Esteban", "Quito", LocalDate.parse("2023-01-01"), credencial, "OSDE");
+		Empleado efectivo2 = new Efectivo(1, "Gonzalo", "Gonzales", LocalDate.parse("2023-01-01"), otraCredencial, "OSDE");
+		
+		empresa.agregarEmpleado(efectivo1);
+		empresa.agregarEmpleado(efectivo2); // X
+		
+		assertEquals(1,empresa.getEmpleados().size());
+	}
+	
+	@Test
+	public void queNoSePuedanAgregarDosEmpleadosConLaMismaCredencial() {
 		Empresa empresa = new Empresa("Queremos Aprobar");
 		
 		Credencial credencial = new Credencial(1);
 		
-		Empleado efectivo = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), credencial, "OSDE");
-		Empleado efectivo2 = new Efectivo(123, "Gonzalo", "Gonzales", LocalDate.parse("2023-01-01"), credencial, "OSDE");
+		Empleado efectivo1 = new Efectivo(1, "Esteban", "Quito", LocalDate.parse("2023-01-01"), credencial, "OSDE");
+		Empleado efectivo2 = new Efectivo(2, "Gonzalo", "Gonzales", LocalDate.parse("2023-01-01"), credencial, "OSDE");
 		
-		empresa.agregarEmpleado(efectivo);
-		empresa.agregarEmpleado(efectivo2);
+		empresa.agregarEmpleado(efectivo1);
+		empresa.agregarEmpleado(efectivo2); // X
 		
 		assertEquals(1,empresa.getEmpleados().size());
 	}
@@ -125,7 +134,7 @@ public class TestEmpresa {
 		Empleado efectivoA = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), credencial, "OSDE");
 		
 		empresa.agregarEmpleado(efectivoA);
-		empresa.agregarCredencial(credencial);//Esto no lo agrega por el metodo "agregarEmpleado"
+		empresa.agregarCredencial(credencial); // Esto no lo agrega por el metodo "agregarEmpleado"
 
 		assertEquals(1,empresa.getCredenciales().size());
 	}
@@ -141,41 +150,40 @@ public class TestEmpresa {
 			
 			empresa.agregarCredencial(credencial);
 			
-			empresa.asignarCredencialParaEmpleado(efectivoB, credencial);
-			
-			Integer valorObtenido = efectivoB.getCredencial().getId(); //1
+			assertNull(efectivoB.getCredencial());
+			empresa.asignarCredencialParaEmpleado(efectivoB, credencial); // Aca ACTIVA la credencial
+			assertNotNull(efectivoB.getCredencial());
 			
 			Estado estadoEsperado = Estado.ACTIVADA;
 			Estado estadoObtenido = efectivoA.getCredencial().getEstado();
 			
-			assertEquals(credencial.getId(), valorObtenido);
 			assertEquals(estadoEsperado, estadoObtenido);
-			
 		}
 
 
 		@Test
 		public void queSePuedaEliminarUnEmpleadoYSeDesactiveSuCrendecial() {
-			
 			String nombre = "Queremos Aprobar";
+			Empresa empresa = new Empresa(nombre);
+			
+			Credencial credencial = new Credencial(1);
+			
 			Integer legajo = 123;
 			String nombreEmpleado = "Esteban";
 			String apellido = "Quito";
 			LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
-			Integer idCredencial = 1;
 			String obraSocial = "OSDE";
-
-			Empresa empresa = new Empresa(nombre);
-			Credencial credencial = new Credencial(idCredencial);
 			Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial, obraSocial);
+
 			empresa.agregarEmpleado(efectivo);
 			empresa.eliminarEmpleadoYDesactivarCredencial(efectivo);
+			
 			Estado estadoEsperado = Estado.DESACTIVADA;
 			Estado estadoObtenido;
 			Integer cantidadEsperada = 0;
 			Integer valorObtenido = empresa.getEmpleados().size();
 			for (Credencial credencialObtenida : empresa.getCredenciales()) {
-				if(credencialObtenida.getId().equals(idCredencial)) {
+				if(credencialObtenida.getId().equals(credencial.getId())) {
 					estadoObtenido = credencialObtenida.getEstado();
 					assertEquals(estadoEsperado, estadoObtenido);
 				}
@@ -185,8 +193,6 @@ public class TestEmpresa {
 			
 		}
 			
-
-	
 	@Test
 	public void queSePuedaAgregarUnaCredencialAUnaEmpresa() {
 		Empresa empresa = new Empresa("Queremos aprobar");
@@ -200,7 +206,6 @@ public class TestEmpresa {
 		assertEquals(valEsp, valObt);
 	}
 	
-	
 	@Test
 	public void queNoSePuedaAgregarUnaCredencialConMismoID() {
 		Empresa empresa = new Empresa("Queremos aprobar");
@@ -210,7 +215,7 @@ public class TestEmpresa {
 		
 		empresa.agregarCredencial(credencial1);
 		empresa.agregarCredencial(credencial2);
-		empresa.agregarCredencial(credencial3);
+		empresa.agregarCredencial(credencial3); // X
 		
 		Integer valEsp = 2;
 		Integer valObt = empresa.getCredenciales().size();
@@ -221,8 +226,10 @@ public class TestEmpresa {
 	@Test
 	public void queSePuedaAgregarUnPermisoEnLaCredencial() {
 		Empresa empresa = new Empresa("Queremos aprobar");
+		
 		Integer idCredencial = 1;
 		Credencial credencial = new Credencial(idCredencial);
+		
 		Integer permiso = 1;
 		
 		empresa.agregarCredencial(credencial);
@@ -355,10 +362,6 @@ public class TestEmpresa {
 		
 		Integer valEsp = 2;
 		Integer valObt = listaAccesosPorPuerta.size();
-		
-//		for (Acceso acceso : listaAccesosPorPuerta) {
-//			System.out.println(acceso.getEmpleado().getApellido());
-//		}
 		
 		assertEquals(valEsp, valObt);
 	}
