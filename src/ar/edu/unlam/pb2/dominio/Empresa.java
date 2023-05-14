@@ -3,7 +3,6 @@ package ar.edu.unlam.pb2.dominio;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class Empresa {
@@ -73,12 +72,24 @@ public class Empresa {
 	}
 
 	public void agregarEmpleado(Empleado empleado) {
-		if (!this.credenciales.contains(empleado.getCredencial())) {
-			this.empleados.add(empleado);
-			this.credenciales.add(empleado.getCredencial());
+		if (empleado instanceof Contratado) {
+			if (((Contratado) empleado).getContrato().getFechaCaducidad().isAfter(empleado.getFechaIngreso())) {
+				this.registrarCredencialesEmpleados(empleado);
+			}
+		} else {
+			this.registrarCredencialesEmpleados(empleado);
 		}
 	}
 	
+	private void registrarCredencialesEmpleados(Empleado empleado) {
+		if (!this.credenciales.contains(empleado.getCredencial())) {
+			this.empleados.add(empleado);
+			this.credenciales.add(empleado.getCredencial());
+		} else {
+			this.empleados.add(empleado);
+		}
+	}
+
 	public void agregarCredencial(Credencial credencial) {
 		credencial.setEstado(Estado.DESACTIVADA);
 		this.credenciales.add(credencial);

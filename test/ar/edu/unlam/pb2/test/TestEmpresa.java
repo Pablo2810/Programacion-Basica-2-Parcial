@@ -2,12 +2,8 @@ package ar.edu.unlam.pb2.test;
 
 import static org.junit.Assert.*;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
-import java.util.HashMap;
-
 
 import org.junit.Test;
 
@@ -76,14 +72,25 @@ public class TestEmpresa {
 	}
 	
 	@Test
-	public void queSePuedaAgregarUnEmpleadoSinCredencialAUnaEmpresa() {
-//		String nombre = "Queremos Aprobar";
-//		Integer legajo = 123;
-//		String nombreEmpleado = "Esteban";
-//		String apellido = "Quito";
-//		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
-//		String obraSocial = "OSDE";
+	public void queNoSePuedaAgregarUnEmpleadoContratadoConUnaFechaDeCaducidadInvalida() {
+		Empresa empresa = new Empresa("Queremos aprobar");
 		
+		Empleado contratado1 = new Contratado(1, "Carlos", "Lopez", LocalDate.parse("2023-01-01"), LocalDate.parse("2023-12-20"));
+		Empleado contratado2 = new Contratado(2, "Esteban", "Lopez", LocalDate.parse("2023-12-10"), LocalDate.parse("2023-02-20"));
+		
+		empresa.agregarEmpleado(contratado1);
+		empresa.agregarEmpleado(contratado2);
+		
+		Integer valEsp = 1;
+		Integer valObt = empresa.getEmpleados().size();
+		for (Empleado empleado : empresa.getEmpleados()) {
+			System.out.println(empleado.getLegajo());
+		}
+		assertEquals(valEsp, valObt);
+	}
+	
+	@Test
+	public void queSePuedaAgregarUnEmpleadoSinCredencialAUnaEmpresa() {
 		Empresa empresa = new Empresa("Queremos Aprobar");
 		Empleado efectivo = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), "OSDE");
 		
@@ -96,16 +103,6 @@ public class TestEmpresa {
 	
 	@Test
 	public void queNoSePuedanAgregarDosEmpleadosConElMismoLegajoYCredencialAUnaEmpresa() {
-//		String nombre = "Queremos Aprobar";
-//		Integer legajo = 123;
-//		String nombreEmpleado = "Esteban";
-//		String nombreEmpleado2 = "Gonzalo";
-//		String apellido = "Quito";
-//		String apellido2 = "Gonzales";
-//		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
-//		Integer idCredencial = 1;
-//		String obraSocial = "OSDE";
-//		int CANTIDAD_ESPERADA = 1;
 		Empresa empresa = new Empresa("Queremos Aprobar");
 		
 		Credencial credencial = new Credencial(1);
@@ -120,44 +117,21 @@ public class TestEmpresa {
 	}
 	
 	@Test
-	public void queNoSePuedaAgregarUnEmpleadoConUnaCredencialAnteriorMenteRegistrada() {
-//		String nombre = "Queremos Aprobar";
-//		Integer legajo = 123;
-//		String nombreEmpleado = "Esteban";
-//		String apellido = "Quito";
-//		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
-//		Integer idCredencial = 1;
-//		String obraSocial = "OSDE";
-//		int CANTIDAD_EMPLEADOS_ESPERADOS = 0;
-//		int CANTIDAD_CREDENCIALES_ESPERADAS = 1;
-
+	public void queNoSePuedaAgregarUnaCredencialAnteriorMenteRegistrada() {
 		Empresa empresa = new Empresa("Queremos Aprobar");
 		
 		Credencial credencial = new Credencial(1);
 		
 		Empleado efectivoA = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), credencial, "OSDE");
-		Empleado efectivoB = new Efectivo(456, "A", "A", LocalDate.parse("2023-01-01"), "UP");
 		
-		empresa.agregarCredencial(credencial);
 		empresa.agregarEmpleado(efectivoA);
-		//empresa.agregarEmpleado(efectivoB);
+		empresa.agregarCredencial(credencial);//Esto no lo agrega por el metodo "agregarEmpleado"
 
-		assertEquals(0,empresa.getEmpleados().size());
 		assertEquals(1,empresa.getCredenciales().size());
-		
-		
 	}
 	
 		@Test
 	 	public void queSeLePuedaAsignarUnaCredencialAnteriormenteRegistradaAUnEmpleadoYActivarla() {
-//			String nombre = "Queremos Aprobar";
-//			Integer legajo = 123;
-//			String nombreEmpleado = "Esteban";
-//			String apellido = "Quito";
-//			LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
-//			String obraSocial = "OSDE";
-//			Integer idCredencial = 1;
-			
 			Empresa empresa = new Empresa("Queremos Aprobar");
 			
 			Credencial credencial = new Credencial(1);
@@ -520,7 +494,6 @@ public class TestEmpresa {
 		empresa.agregarEmpleado(contratado3);
 		Empleado empleadoObtenido = empresa.obtenerEmpleadoPorLegajo(312);
 		int valorEsperado = 312;
-		int valorObtenido = empleadoObtenido.getLegajo();
 		
 		assertEquals(empleadoObtenido.getNombre(), "Juan");
 		assertEquals(valorEsperado, 312);
