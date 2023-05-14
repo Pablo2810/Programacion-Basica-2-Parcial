@@ -257,11 +257,13 @@ public class TestEmpresa {
 		
 		empresa.agregarPuerta(puerta);
 		empresa.agregarEmpleado(efectivo);
-		empresa.agregarCredencial(credencial);
+		empresa.agregarCredencial(efectivo.getCredencial());
 		empresa.agregarPermisoACredencial(idPuerta, idCredencial);
 		
 		empresa.registrarAcceso(efectivo,puerta);
 		
+		assertEquals(1,empresa.getCredenciales().size());
+		assertEquals(1,empresa.getEmpleados().size());
 		assertEquals(1,empresa.getAccesos().size());
 	}
 	@Test
@@ -284,8 +286,35 @@ public class TestEmpresa {
 		empresa.agregarPuerta(puerta);
 		empresa.agregarEmpleado(efectivo);
 		empresa.agregarCredencial(efectivo.getCredencial());
+		empresa.agregarPermisoACredencial(idPuerta, idCredencial);
 		
 		empresa.registrarAcceso(efectivo,puerta);
+		
+		assertEquals(0,empresa.getAccesos().size());
+	}
+	@Test
+	public void queNoSePuedaRegistrarUnAccesoEnLaEmpresaCuandoElEmpleadoContratadoTieneElContratoVencido() {
+		Empresa empresa = new Empresa("Queremos aprobar");
+		
+		Integer idCredencial = 1;
+		Credencial credencial = new Credencial(idCredencial);
+		
+		Integer legajo = 123;
+		String nombreEmpleado = "Esteban";
+		String apellido = "Quito";
+		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
+		LocalDate fechaDeCaducidad = LocalDate.parse("2023-04-01");
+		Empleado contratado = new Contratado(legajo, nombreEmpleado, apellido, fechaIngreso, credencial,fechaDeCaducidad);
+		
+		Integer idPuerta = 3;
+		Puerta puerta = new Puerta(idPuerta);
+		
+		empresa.agregarPuerta(puerta);
+		empresa.agregarEmpleado(contratado);
+		empresa.agregarCredencial(contratado.getCredencial());
+		empresa.agregarPermisoACredencial(idPuerta, idCredencial);
+		
+		empresa.registrarAcceso(contratado,puerta);
 		
 		assertEquals(0,empresa.getAccesos().size());
 	}

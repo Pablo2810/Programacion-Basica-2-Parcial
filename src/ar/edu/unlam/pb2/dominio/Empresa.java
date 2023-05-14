@@ -99,6 +99,16 @@ public class Empresa {
 		}
 		return false;
 	}
+	
+	// verifica que el contrato del empleado no este vencido. true -> si el contrato está vigente.
+	private Boolean verificarVencimientoDeContratoConFechaActual(Empleado empleado) {
+		if (empleado instanceof Contratado) {
+			if (((Contratado)empleado).getContrato().getFechaCaducidad().isAfter(LocalDate.now())) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	private Boolean verificarQueEmpleadoNoTengaMismaCredencial(Empleado empleado) {
 		Boolean credecialUsada = false;
@@ -155,8 +165,17 @@ public class Empresa {
 	}
 
 	public void registrarAcceso(Empleado empleado, Puerta puerta) {
-		if(empleado.getCredencial().buscarPermiso(puerta.getIdPuerta()) != null) {
-			this.accesos.add(new Acceso(puerta,empleado,LocalDateTime.now()));
+		if(empleado.getCredencial().getEstado().equals(Estado.ACTIVADA)) {
+			if(empleado.getCredencial().buscarPermiso(puerta.getIdPuerta()) != null) {
+				if(empleado instanceof Contratado) {
+					if(verificarVencimientoDeContratoConFechaActual(empleado)) {
+						this.accesos.add(new Acceso(puerta,empleado,LocalDateTime.now()));
+					}
+				}
+				if(empleado instanceof Efectivo) {
+					this.accesos.add(new Acceso(puerta,empleado,LocalDateTime.now()));
+				}
+			}
 		}
 	}
 
