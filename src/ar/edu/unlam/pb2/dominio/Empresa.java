@@ -84,6 +84,7 @@ public class Empresa {
 				this.empleados.add(empleado);
 			}
 		}
+		
 		if (!this.credenciales.contains(empleado.getCredencial()) && empleado.getCredencial() != null) {
 			this.credenciales.add(empleado.getCredencial());
 		}
@@ -116,12 +117,10 @@ public class Empresa {
 	
 	/********************************/
 	
-	public void asignarCredencialParaEmpleado(Empleado empleado, Credencial credencial) {
+	public void asignarCredencial(Credencial credencial, Empleado empleado) {
 		if (empleado.getCredencial() == null) {
 			empleado.setCredencial(credencial);
 			credencial.setEstado(Estado.ACTIVADA);
-		} else {
-			System.out.println("El empleado ya tiene una credencial");
 		}
 	}
 
