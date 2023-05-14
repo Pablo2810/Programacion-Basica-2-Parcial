@@ -15,10 +15,6 @@ public class Contratado extends Empleado {
 		
 		this.contrato = new Contrato(FechaCaducidad);
 	}
-	
-	public void abrirPuerta(Empleado empleado, Puerta puerta) {
-		
-	}
 
 	public Contrato getContrato() {
 		return contrato;

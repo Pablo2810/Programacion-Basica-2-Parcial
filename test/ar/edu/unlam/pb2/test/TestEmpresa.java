@@ -115,14 +115,17 @@ public class TestEmpresa {
 		Empresa empresa = new Empresa("Queremos Aprobar");
 		
 		Credencial credencial = new Credencial(1);
+		Credencial otraCredencial = new Credencial(2);
 		
-		Empleado efectivo1 = new Efectivo(1, "Esteban", "Quito", LocalDate.parse("2023-01-01"), credencial, "OSDE");
-		Empleado efectivo2 = new Efectivo(2, "Gonzalo", "Gonzales", LocalDate.parse("2023-01-01"), credencial, "OSDE");
+		Empleado contratado = new Contratado(1, "Carlos", "Lopez", LocalDate.parse("2023-10-01"),credencial, LocalDate.parse("2023-12-20"));
+		Empleado efectivo = new Efectivo(2, "Esteban", "Quito", LocalDate.parse("2023-01-01"), otraCredencial, "OSDE");
+		Empleado otroEfectivo = new Efectivo(3, "Gonzalo", "Gonzales", LocalDate.parse("2023-01-01"), credencial, "OSDE");
 		
-		empresa.agregarEmpleado(efectivo1);
-		empresa.agregarEmpleado(efectivo2); // X
+		empresa.agregarEmpleado(contratado);
+		empresa.agregarEmpleado(efectivo);
+		empresa.agregarEmpleado(otroEfectivo); // X
 		
-		assertEquals(1,empresa.getEmpleados().size());
+		assertEquals(2,empresa.getEmpleados().size());
 	}
 	
 	@Test
@@ -140,26 +143,40 @@ public class TestEmpresa {
 	}
 	
 		@Test
-	 	public void queSeLePuedaAsignarUnaCredencialAnteriormenteRegistradaAUnEmpleadoYActivarla() {
+	 	public void queSeLePuedaAsignarUnaCredencialAUnEmpleado() {
 			Empresa empresa = new Empresa("Queremos Aprobar");
 			
 			Credencial credencial = new Credencial(1);
 			
-			Empleado efectivoA = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), credencial, "OSDE");
 			Empleado efectivoB = new Efectivo(456, "A", "A", LocalDate.parse("2023-01-01"), "UP");
 			
 			empresa.agregarCredencial(credencial);
-			
-			assertNull(efectivoB.getCredencial());
-			empresa.asignarCredencialParaEmpleado(efectivoB, credencial); // Aca ACTIVA la credencial
-			assertNotNull(efectivoB.getCredencial());
+			empresa.agregarEmpleado(efectivoB);
 			
 			Estado estadoEsperado = Estado.ACTIVADA;
-			Estado estadoObtenido = efectivoA.getCredencial().getEstado();
+			Estado estadoObtenido = efectivoB.getCredencial().getEstado();
 			
+			assertNotNull(efectivoB.getCredencial());
 			assertEquals(estadoEsperado, estadoObtenido);
 		}
-
+		
+		@Test
+	 	public void queNoSeLePuedaAsignarUnaCredencialAUnEmpleadoSiOtroYaLaTiene() {
+			Empresa empresa = new Empresa("Queremos Aprobar");
+			
+			Credencial credencial = new Credencial(1);
+			
+			Empleado efectivoA = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), "OSDE");
+			Empleado efectivoB = new Efectivo(456, "A", "A", LocalDate.parse("2023-01-01"), "UP");
+			
+			empresa.agregarCredencial(credencial);//DESACTIVADA
+			
+			empresa.agregarEmpleado(efectivoA); //Le asigna "credencial"
+			empresa.agregarEmpleado(efectivoB);//credencial null
+	
+			assertEquals(1, empresa.getCredenciales().size());
+			assertNull(efectivoB.getCredencial());
+		}
 
 		@Test
 		public void queSePuedaEliminarUnEmpleadoYSeDesactiveSuCrendecial() {
@@ -250,15 +267,15 @@ public class TestEmpresa {
 		String apellido = "Quito";
 		LocalDate fechaIngreso = LocalDate.parse("2023-01-01");
 		String obraSocial = "OSDE";
-		Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial, obraSocial);
+		Empleado efectivo = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, obraSocial);
 		
 		Integer idPuerta = 1;
 		Puerta puerta = new Puerta(idPuerta);
 		
 		empresa.agregarPuerta(puerta);
+		empresa.agregarCredencial(credencial);
 		empresa.agregarEmpleado(efectivo);
-		empresa.agregarCredencial(efectivo.getCredencial());
-		empresa.agregarPermisoACredencial(idPuerta, idCredencial);
+		empresa.agregarPermisoACredencial(idPuerta,efectivo.getCredencial().getId());;
 		
 		empresa.registrarAcceso(efectivo,puerta);
 		
@@ -337,7 +354,7 @@ public class TestEmpresa {
 		empresa.agregarPuerta(puerta2);
 		empresa.agregarCredencial(credencial);
 		empresa.agregarEmpleado(efectivo);
-		empresa.asignarCredencialParaEmpleado(efectivo, credencial);
+		empresa.asignarCredencial(credencial, efectivo);
 		empresa.agregarPermisoACredencial(2, 1);
 		
 		empresa.registrarAcceso(efectivo,puerta1); // no se registra porque no tiene permiso para esta puerta.
@@ -378,7 +395,7 @@ public class TestEmpresa {
 		empresa.agregarEmpleado(efectivo);
 		empresa.agregarEmpleado(contratado);
 		
-		empresa.asignarCredencialParaEmpleado(contratado, credencial);
+		empresa.asignarCredencial(credencial, contratado);
 		
 		empresa.registrarAcceso(efectivo,puertaA);
 		empresa.registrarAcceso(contratado, puertaB);
@@ -552,6 +569,7 @@ public class TestEmpresa {
 		Credencial credencial2 = new Credencial(2);
 		Credencial credencial3 = new Credencial(3);
 		Credencial credencial4 = new Credencial(4);
+		
 		Empleado efectivo1 = new Efectivo(legajo, nombreEmpleado, apellido, fechaIngreso, credencial1, obraSocial);
 		Empleado efectivo2 = new Efectivo(132, nombreEmpleado, apellido, fechaIngreso2, credencial2, obraSocial);
 		Empleado contratado1 = new Contratado(213, nombreEmpleado, apellido, fechaIngreso3, credencial3, fechaEgreso);
@@ -577,20 +595,33 @@ public class TestEmpresa {
 		Credencial cred3 = new Credencial(3);
 		Credencial cred4 = new Credencial(4);
 		
+		empresa.agregarCredencial(cred1);
+		empresa.agregarCredencial(cred2);
+		empresa.agregarCredencial(cred3);
+		empresa.agregarCredencial(cred4);
+		
 		Puerta puerta1 = new Puerta(1);
 		Puerta puerta2 = new Puerta(2);
 		Puerta puerta3 = new Puerta(3);
 		Puerta puerta4 = new Puerta(4);
 		
-		Empleado emp1 = new Efectivo(1, "David", "A", LocalDate.parse("2023-01-02"), cred1, "UP");
-		Empleado emp2 = new Efectivo(2, "Mirtha", "B", LocalDate.parse("2023-02-16"), cred2, "UP");
-		Empleado emp3 = new Contratado(3, "Carlos", "C", LocalDate.parse("2023-03-21"), cred3, LocalDate.parse("2023-10-10"));
-		Empleado emp4 = new Contratado(4, "Luna", "D", LocalDate.parse("2023-04-12"), cred4, LocalDate.parse("2023-10-10"));
+		empresa.agregarPuerta(puerta1);
+		empresa.agregarPuerta(puerta2);
+		empresa.agregarPuerta(puerta3);
+		empresa.agregarPuerta(puerta4);
+
+		Empleado emp1 = new Efectivo(1, "David", "A", LocalDate.parse("2023-01-02"), "UP");
+		Empleado emp2 = new Efectivo(2, "Mirtha", "B", LocalDate.parse("2023-02-16"), "UP");
+		Empleado emp3 = new Contratado(3, "Carlos", "C", LocalDate.parse("2023-03-21"), LocalDate.parse("2023-10-10"));
+		Empleado emp4 = new Contratado(4, "Luna", "D", LocalDate.parse("2023-04-12"), LocalDate.parse("2023-10-10"));
 		
 		empresa.agregarEmpleado(emp1); 
 		empresa.agregarEmpleado(emp2);
 		empresa.agregarEmpleado(emp3);
 		empresa.agregarEmpleado(emp4);
+		
+		assertEquals(4, empresa.getCredenciales().size());
+		assertEquals(4, empresa.getEmpleados().size());
 
 		//Si no agregamos este permiso de credencial la "puerta1" si la ponemos de parametro la lista estara vacia. No tiene permiso.
 		//empresa.agregarPermisoACredencial(puerta1.getIdPuerta(), cred1.getId()); 
@@ -598,18 +629,17 @@ public class TestEmpresa {
 		empresa.agregarPermisoACredencial(puerta2.getIdPuerta(), cred2.getId());
 		empresa.agregarPermisoACredencial(puerta2.getIdPuerta(), cred3.getId());
 		
-		empresa.registrarAcceso(emp1, puerta1);
-		empresa.registrarAcceso(emp2, puerta2);
-		empresa.registrarAcceso(emp3, puerta3);
-		empresa.registrarAcceso(emp4, puerta4);
-		empresa.registrarAcceso(emp1, puerta2);
-		empresa.registrarAcceso(emp3, puerta2);
-		empresa.registrarAcceso(emp2, puerta2);
+		empresa.registrarAcceso(emp1, puerta1); //no se registra
+		empresa.registrarAcceso(emp2, puerta2); //se registra
+		empresa.registrarAcceso(emp3, puerta3); //no se registra
+		empresa.registrarAcceso(emp4, puerta4); //no se registra
+		empresa.registrarAcceso(emp1, puerta2); //se registra
+		empresa.registrarAcceso(emp3, puerta2); //se registra
+		empresa.registrarAcceso(emp2, puerta2); //se registra
 		
 		ArrayList<Empleado> listaEmpleadosQueAccedieronPuerta = empresa.obtenerListadoEmpleadoPorPuerta(puerta2);
 		
-		
-		Integer valEsp = 3;
+		Integer valEsp = 4;
 		Integer valObt = listaEmpleadosQueAccedieronPuerta.size();
 		
 		assertEquals(valEsp, valObt);
