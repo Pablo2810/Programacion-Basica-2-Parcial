@@ -12,6 +12,7 @@ public class Credencial {
 	public Credencial(Integer id) {
 		this.id = id;
 		this.permisos = new HashSet<Integer>();
+		this.estado = Estado.DESACTIVADA;
 	}
 
 	public Integer getId() {

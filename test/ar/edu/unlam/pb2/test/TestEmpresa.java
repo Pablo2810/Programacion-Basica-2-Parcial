@@ -143,7 +143,7 @@ public class TestEmpresa {
 	}
 	
 		@Test
-	 	public void queSeLePuedaAsignarUnaCredencialAnteriormenteRegistradaAUnEmpleadoYActivarla() {
+	 	public void queSeLePuedaAsignarUnaCredencialAUnEmpleado() {
 			Empresa empresa = new Empresa("Queremos Aprobar");
 			
 			Credencial credencial = new Credencial(1);
@@ -153,14 +153,10 @@ public class TestEmpresa {
 			empresa.agregarCredencial(credencial);
 			empresa.agregarEmpleado(efectivoB);
 			
-			assertNull(efectivoB.getCredencial());
-			empresa.asignarCredencial(credencial, efectivoB);
-			assertNotNull(efectivoB.getCredencial());
-			
-			
 			Estado estadoEsperado = Estado.ACTIVADA;
 			Estado estadoObtenido = efectivoB.getCredencial().getEstado();
 			
+			assertNotNull(efectivoB.getCredencial());
 			assertEquals(estadoEsperado, estadoObtenido);
 		}
 		
@@ -170,15 +166,14 @@ public class TestEmpresa {
 			
 			Credencial credencial = new Credencial(1);
 			
-			Empleado efectivoA = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), credencial, "OSDE");
+			Empleado efectivoA = new Efectivo(123, "Esteban", "Quito", LocalDate.parse("2023-01-01"), "OSDE");
 			Empleado efectivoB = new Efectivo(456, "A", "A", LocalDate.parse("2023-01-01"), "UP");
 			
-			empresa.agregarCredencial(credencial);
-			empresa.agregarEmpleado(efectivoA);
-			empresa.agregarEmpleado(efectivoB);
+			empresa.agregarCredencial(credencial);//DESACTIVADA
 			
-			empresa.asignarCredencial(credencial, efectivoB);
-			
+			empresa.agregarEmpleado(efectivoA); //Le asigna "credencial"
+			empresa.agregarEmpleado(efectivoB);//credencial null
+	
 			assertEquals(1, empresa.getCredenciales().size());
 			assertNull(efectivoB.getCredencial());
 		}

@@ -81,6 +81,8 @@ public class Empresa {
 			}
 		} else {
 			if (!this.verificarCredencialDelEmpleado(empleado)) {
+				Credencial credencial = buscarCredencialPorEstado(Estado.DESACTIVADA);
+				asignarCredencial(credencial, empleado);
 				this.empleados.add(empleado);
 			}
 		}
@@ -90,6 +92,15 @@ public class Empresa {
 		}
 	}
 	
+	private Credencial buscarCredencialPorEstado(Estado desactivada) {
+		for (Credencial credencial : credenciales) {
+			if (credencial.getEstado().equals(desactivada)) {
+				return credencial;
+			}
+		}
+		return null;
+	}
+
 	private Boolean verificarCredencialDelEmpleado(Empleado empleado) {
 		if (empleado.getCredencial() != null) {
 			for (Empleado empleado2 : empleados) {
@@ -119,8 +130,10 @@ public class Empresa {
 	
 	public void asignarCredencial(Credencial credencial, Empleado empleado) {
 		if (empleado.getCredencial() == null) {
-			empleado.setCredencial(credencial);
-			credencial.setEstado(Estado.ACTIVADA);
+			if (buscarCredencialPorEstado(Estado.DESACTIVADA) !=null) {
+				empleado.setCredencial(credencial);
+				credencial.setEstado(Estado.ACTIVADA);
+			}
 		}
 	}
 
