@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class Empresa {
 
@@ -72,62 +73,46 @@ public class Empresa {
 	}
 
 	public void agregarEmpleado(Empleado empleado) {
-		if (empleado.getCredencial() == null) {
-			if (empleado instanceof Contratado) {
-				if (this.verificarFechaCaducidad(empleado)) {
-					this.registrarEmpleado(empleado);
+		if (empleado instanceof Contratado) {
+			if(this.verificarFechaCaducidad(empleado)) {
+				if (!this.verificarCredencialDelEmpleado(empleado)) {
+					this.empleados.add(empleado);
 				}
-			} else {
-				this.registrarEmpleado(empleado);
 			}
 		} else {
-			if (!this.verificarQueEmpleadoNoTengaMismaCredencial(empleado)) {
-				if (this.verificarFechaCaducidad(empleado)) {
-					this.registrarEmpleado(empleado);
-				} else {
-					this.registrarEmpleado(empleado);
-				}
+			if (!this.verificarCredencialDelEmpleado(empleado)) {
+				this.empleados.add(empleado);
 			}
+		}
+		if (!this.credenciales.contains(empleado.getCredencial()) && empleado.getCredencial() != null) {
+			this.credenciales.add(empleado.getCredencial());
 		}
 	}
 	
-	private Boolean verificarFechaCaducidad(Empleado empleado) {
-		if (empleado instanceof Contratado) {
-			if (((Contratado) empleado).getContrato().getFechaCaducidad().isAfter(empleado.getFechaIngreso())) {
-				return true;
+	private Boolean verificarCredencialDelEmpleado(Empleado empleado) {
+		if (empleado.getCredencial() != null) {
+			for (Empleado empleado2 : empleados) {
+				if (empleado.getCredencial().equals(empleado2.getCredencial())) {
+					return true;
+				}
 			}
 		}
 		return false;
 	}
-
-	private Boolean verificarQueEmpleadoNoTengaMismaCredencial(Empleado empleado) {
-		Boolean credecialUsada = false;
-		for (Empleado empl : empleados) {
-			if (empl.getCredencial().equals(empleado.getCredencial())) {
-				credecialUsada = true;
-			}
+	
+	private Boolean verificarFechaCaducidad(Empleado empleado) {
+		Boolean fechaValida = false;
+		if (((Contratado) empleado).getContrato().getFechaCaducidad().isAfter(empleado.getFechaIngreso())) {
+			fechaValida = true;
 		}
-		return credecialUsada;
+		return fechaValida;
 	}
 
-	private void registrarEmpleado(Empleado empleado) {
-		if (!this.credenciales.contains(empleado.getCredencial()) && empleado.getCredencial() != null) {
-			this.empleados.add(empleado);
-			this.agregarCredencial(empleado.getCredencial());;
-		} else {
-			this.empleados.add(empleado);
-		}
-	}
 
 	public void agregarCredencial(Credencial credencial) {
 		credencial.setEstado(Estado.DESACTIVADA);
 		this.credenciales.add(credencial);
 	}
-	
-//	private void agregarCredencialActivada(Credencial credencial) {
-//		credencial.setEstado(Estado.ACTIVADA);
-//		this.credenciales.add(credencial);
-//	}
 	
 	/********************************/
 	

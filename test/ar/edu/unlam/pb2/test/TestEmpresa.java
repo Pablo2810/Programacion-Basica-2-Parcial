@@ -115,14 +115,17 @@ public class TestEmpresa {
 		Empresa empresa = new Empresa("Queremos Aprobar");
 		
 		Credencial credencial = new Credencial(1);
+		Credencial otraCredencial = new Credencial(2);
 		
-		Empleado efectivo1 = new Efectivo(1, "Esteban", "Quito", LocalDate.parse("2023-01-01"), credencial, "OSDE");
-		Empleado efectivo2 = new Efectivo(2, "Gonzalo", "Gonzales", LocalDate.parse("2023-01-01"), credencial, "OSDE");
+		Empleado contratado = new Contratado(1, "Carlos", "Lopez", LocalDate.parse("2023-10-01"),credencial, LocalDate.parse("2023-12-20"));
+		Empleado efectivo = new Efectivo(1, "Esteban", "Quito", LocalDate.parse("2023-01-01"), otraCredencial, "OSDE");
+		Empleado otroEfectivo = new Efectivo(2, "Gonzalo", "Gonzales", LocalDate.parse("2023-01-01"), credencial, "OSDE");
 		
-		empresa.agregarEmpleado(efectivo1);
-		empresa.agregarEmpleado(efectivo2); // X
+		empresa.agregarEmpleado(contratado);
+		empresa.agregarEmpleado(efectivo);
+		empresa.agregarEmpleado(otroEfectivo); // X
 		
-		assertEquals(1,empresa.getEmpleados().size());
+		assertEquals(2,empresa.getEmpleados().size());
 	}
 	
 	@Test
